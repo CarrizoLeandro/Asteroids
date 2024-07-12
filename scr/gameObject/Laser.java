@@ -22,9 +22,9 @@ public class Laser extends MovingObject {
 		position = position.add(velocity);
 		if (position.getX() < 0 || position.getX() > Constants.ANCHO ||
 				position.getY() < 0 || position.getY() > Constants.ALTO){
-			gameState.getMovingObjects().remove(this);
+			Destroy();
 		}
-		
+		collidesWith();
 	}
 
 	@Override
@@ -37,6 +37,11 @@ public class Laser extends MovingObject {
 		
 		g2d.drawImage(texture, at, null);
 		
+	}
+	
+
+	public Vector2D getCenter() {
+		return new Vector2D(position.getX()+anchotx/2,position.getY()+anchotx/2);
 	}
 
 }

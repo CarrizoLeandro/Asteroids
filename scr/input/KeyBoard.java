@@ -16,9 +16,9 @@ public class KeyBoard implements KeyListener {
 	}
 
 	public void update() {
-		UP=keys[KeyEvent.VK_UP];
-		LEFT=keys[KeyEvent.VK_LEFT];
-		RIGHT=keys[KeyEvent.VK_RIGHT];
+		UP=keys[KeyEvent.VK_W];
+		LEFT=keys[KeyEvent.VK_A];
+		RIGHT=keys[KeyEvent.VK_D];
 		SHOOT = keys[KeyEvent.VK_P];
 	}
 

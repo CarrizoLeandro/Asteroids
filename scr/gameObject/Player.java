@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import gameObejcts.Chronometer;
 import graphics.Assets;
 import input.KeyBoard;
 import math.Vector2D;
@@ -81,6 +80,7 @@ public class Player extends MovingObject {
 		}
 		
 		fireRate.update();
+		collidesWith();
 		
 	}
 
@@ -103,10 +103,8 @@ public class Player extends MovingObject {
 		
 		at= AffineTransform.getTranslateInstance(position.getX(), position.getY());
 		at.rotate(angle,anchotx/2,alturatx/2);
-		g2d.drawImage(Assets.player,  at, null);
+		g2d.drawImage(texture,  at, null);
 	}
 	
-	public Vector2D getCenter() {
-		return new Vector2D(position.getX()+anchotx/2,position.getY()+alturatx/2);
-	}
+	
 }
