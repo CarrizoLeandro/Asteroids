@@ -3,8 +3,8 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 	
-	//nave y laser
-	public static BufferedImage player,speed,blueLaser,greenLaser,redLaser;
+	//nave,enemigo y laser
+	public static BufferedImage player,speed,blueLaser,greenLaser,redLaser,ufo;
 	
 	//naves
 	public static BufferedImage[]bigs = new BufferedImage[4];
@@ -23,6 +23,8 @@ public class Assets {
 		blueLaser = Loader.ImageLoader("/Lasers/laserBlue01.png");
 		greenLaser = Loader.ImageLoader("/Lasers/laserGreen11.png");
 		redLaser = Loader.ImageLoader("/Lasers/laserRed01.png");
+		
+		ufo = Loader.ImageLoader("/ships/enemy/ufoRed.png");
 		
 		for (int i = 0;i<bigs.length;i++) {
 			bigs[i] = Loader.ImageLoader("/meteors/meteorBrown_big"+(i+1)+".png");

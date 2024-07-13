@@ -11,6 +11,7 @@ import gameObject.Meteor;
 import gameObject.MovingObject;
 import gameObject.Player;
 import gameObject.Size;
+import gameObject.Ufo;
 import graphics.Animation;
 import graphics.Assets;
 import math.Vector2D;
@@ -92,6 +93,7 @@ public class GameState {
 			
 		}
 		meteors++;
+		spawnUfo();
 	}
 	
 	public void playExplosion(Vector2D position) {
@@ -101,6 +103,44 @@ public class GameState {
 				position.subtract(new Vector2D(Assets.exp[0].getWidth()/2,Assets.exp[0].getHeight()/2))
 				));
 	}
+	
+	private void spawnUfo() {
+		int rand = (int) (Math.random()*2);
+		
+		double x = rand == 0 ? (Math.random()*Constants.ANCHO) : 0;
+		double y = rand == 0 ? 0 : (Math.random()*Constants.ALTO);
+		
+		ArrayList<Vector2D> path = new ArrayList<Vector2D>();
+		
+		double posX,posY;
+		
+		posX= Math.random()*Constants.ANCHO/2;
+		posY= Math.random()*Constants.ALTO/2;
+		path.add(new Vector2D(posX,posY));
+		
+		posX=Math.random()*(Constants.ANCHO/2) + Constants.ANCHO/2;
+		posY=Math.random()*Constants.ALTO/2;
+		path.add(new Vector2D(posX,posY));
+		
+		posX=Math.random()*Constants.ANCHO/2;
+		posY=Math.random()*(Constants.ALTO/2) + Constants.ALTO/2;
+		path.add(new Vector2D(posX,posY));
+		
+		posX=Math.random()*(Constants.ANCHO/2) + Constants.ANCHO/2;
+		posY=Math.random()*(Constants.ALTO/2) + Constants.ALTO/2;
+		path.add(new Vector2D(posX,posY));
+		
+		movingObjects.add(new Ufo(
+				new Vector2D(x,y),
+				new Vector2D(),
+				Constants.UFO_MAX_VEL,
+				Assets.ufo,
+				path,
+				this
+				));
+		
+	}
+	
 	
 	
 	public void update() {
@@ -142,5 +182,7 @@ public class GameState {
 		return movingObjects;
 	}
 	
-	
+	public Player getPlayer() {
+		return player;
+	}
 }
