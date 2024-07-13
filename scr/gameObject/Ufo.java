@@ -80,8 +80,8 @@ public class Ufo extends MovingObject{
 		    // Obtener el ángulo directo hacia el jugador
 		    double currentAngle = toPlayer.getAngle();
 		    
-		    // Variar el ángulo del disparo aleatoriamente entre -90 y +90 grados respecto al jugador
-		    double variationAngle = (Math.random() - 0.5) * Math.toRadians(100); // (-0.5 a 0.5) * π = -90 a 90 grados
+		    // Variar el ángulo del disparo aleatoriamente entre -50 y +50 grados respecto al jugador
+		    double variationAngle = (Math.random() - 0.5) * Math.toRadians(100);
 		    double newAngle = currentAngle + variationAngle;
 		    
 		    Vector2D firingDirection = toPlayer.setDirection(newAngle);
