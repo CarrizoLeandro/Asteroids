@@ -30,7 +30,7 @@ public class GameState {
 	
 	
 	public GameState() {
-		player = new Player(new Vector2D(Constants.ANCHO/2 - Assets.player.getWidth()/2,Constants.ALTO/2-Assets.player.getHeight()/2),new Vector2D(),5,Assets.player, this);
+		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,Assets.player, this);
 		movingObjects.add(player);
 		
 		meteors=1;
@@ -229,5 +229,8 @@ public class GameState {
 	
 	public Player getPlayer() {
 		return player;
+	}
+	public void subtractLife() {
+		lives --;
 	}
 }

@@ -17,20 +17,37 @@ public class Player extends MovingObject {
 	private boolean aceleracion=false;
 	private Chronometer fireRate;
 	
+	private boolean spawning,visible;
+	private Chronometer spawnTime,flickerTime;
 
 	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState) {
 		super(position, velocity, maxVel, texture, gameState);
 		heading=new Vector2D(0,1);
 		acceleration=new Vector2D();
 		fireRate= new Chronometer();
+		spawnTime = new Chronometer();
+	    flickerTime = new Chronometer();
+	    spawning = false;
+	    visible = true;
 
 	}
 
 	@Override
 	public void update() {
 		
+		if (!spawnTime.isRunning()) {
+			spawning = false;
+			visible = true;
+		}
+		if (spawning) {
+			if (!flickerTime.isRunning()) {
+				flickerTime.run(Constants.FLICKER_TIME);
+				visible = !visible;
+			}
+		}
 		
-		if(KeyBoard.SHOOT && !fireRate.isRunning()) {
+		
+		if(KeyBoard.SHOOT && !fireRate.isRunning() && !spawning) {
 			gameState.getMovingObjects().add(0, new Laser(
 					getCenter().add(heading.scale(anchotx)),
 					heading,
@@ -80,12 +97,34 @@ public class Player extends MovingObject {
 		}
 		
 		fireRate.update();
+		spawnTime.update();
+		flickerTime.update();
 		collidesWith();
 		
 	}
+	
+	@Override
+	public void Destroy() {
+		spawning = true;
+		spawnTime.run(Constants.SPAWNING_TIME);
+		resetValues();
+		gameState.subtractLife();
+	}
+	
+	private void resetValues(){
+		angle=0;
+		velocity=new Vector2D();
+		position =new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY);
+	}
+	
 
 	@Override
 	public void draw(Graphics g) {
+		
+		if (!visible) {
+			return;
+		}
+		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		AffineTransform at1= AffineTransform.getTranslateInstance(position.getX()+ anchotx/2 + 20, position.getY() + alturatx/2+22);
@@ -106,5 +145,7 @@ public class Player extends MovingObject {
 		g2d.drawImage(texture,  at, null);
 	}
 	
-	
+	public boolean isSpawning() {
+		return spawning;
+	}
 }

@@ -1,14 +1,19 @@
 package gameObject;
 
+import graphics.Assets;
+
 public class Constants {
 	// frame dimensions
-	public static final int ANCHO=1200,ALTO=700;
-	
+	public static final int ANCHO=1200,ALTO=700;	
 	//player properties
+	public static final int INICIAL_PLAYER_POSX=ANCHO/2-Assets.player.getWidth()/2;
+	public static final int INICIAL_PLAYER_POSY=ALTO/2-Assets.player.getHeight()/2;
 	public static final int FIRERATE=300;
 	public static final double DELTAANGLE=0.1;
 	public static final double ACC=0.2;
 	public static final double PLAYER_MAX_VEL =7.0;
+	public static final long SPAWNING_TIME=3000;
+	public static final long FLICKER_TIME=200;
 	
 	//Laser properties
 	public static final double LASER_VEL=15.0;
