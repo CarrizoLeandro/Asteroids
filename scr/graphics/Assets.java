@@ -1,4 +1,5 @@
 package graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class Assets {
@@ -11,6 +12,10 @@ public class Assets {
 	public static BufferedImage[]meds = new BufferedImage[2];
 	public static BufferedImage[]smalls=new BufferedImage[2];
 	public static BufferedImage[]tinies=new BufferedImage[2];
+	
+	//Interface
+	public static BufferedImage[]numbers=new BufferedImage[11];
+	public static BufferedImage life;
 	
 	
 	//explosion
@@ -25,7 +30,7 @@ public class Assets {
 		redLaser = Loader.ImageLoader("/Lasers/laserRed01.png");
 		
 		ufo = Loader.ImageLoader("/ships/enemy/ufoRed.png");
-		
+		life = Loader.ImageLoader("/interface/playerLife1_blue.png");
 		for (int i = 0;i<bigs.length;i++) {
 			bigs[i] = Loader.ImageLoader("/meteors/meteorBrown_big"+(i+1)+".png");
 		}
@@ -42,6 +47,8 @@ public class Assets {
 		for (int i = 0 ; i < exp.length ; i++ ) {
 			exp[i] = Loader.ImageLoader("/explosion/"+i+".png");
 		}
+		for(int i = 0; i < numbers.length; i++)
+			numbers[i] = Loader.ImageLoader("/interface/numeral"+i+".png");
 		
 		if (player == null || speed == null) {
             System.out.println("Error al cargar la imagen del jugador");
@@ -49,5 +56,6 @@ public class Assets {
             System.out.println("Imagen del jugador cargada exitosamente");
         }
 	}
+
 	
 }

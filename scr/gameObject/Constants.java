@@ -2,7 +2,7 @@ package gameObject;
 
 public class Constants {
 	// frame dimensions
-	public static final int ANCHO=1000,ALTO=700;
+	public static final int ANCHO=1200,ALTO=700;
 	
 	//player properties
 	public static final int FIRERATE=300;
@@ -15,10 +15,13 @@ public class Constants {
 	
 	//Meteors Properties
 	public static final double METEOR_VEL=0.5;
+	public static final int METEOR_SCORE=20;
 	
 	//Ufo properties
 	public static final int NODE_RADIUS = 160;
 	public static final double UFO_MASS = 60;
 	public static final int UFO_MAX_VEL=3;
 	public static final long UFO_FIRE_RATE=1000;
+	public static final double UFO_ANGLE_RANGE=Math.PI/2;
+	public static final int UFO_SCORE = 40;
 }

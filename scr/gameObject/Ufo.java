@@ -80,17 +80,19 @@ public class Ufo extends MovingObject{
 		    // Obtener el ángulo directo hacia el jugador
 		    double currentAngle = toPlayer.getAngle();
 		    
-		    // Variar el ángulo del disparo aleatoriamente entre -50 y +50 grados respecto al jugador
-		    double variationAngle = (Math.random() - 0.5) * Math.toRadians(100);
-		    double newAngle = currentAngle + variationAngle;
+		    currentAngle += Math.random()*Constants.UFO_ANGLE_RANGE - Constants.UFO_ANGLE_RANGE/2;
 		    
-		    Vector2D firingDirection = toPlayer.setDirection(newAngle);
+		    if(toPlayer.getX()<0) {
+		    	currentAngle = -currentAngle + Math.PI;
+		    }
+		    
+		    toPlayer = toPlayer.setDirection(currentAngle);
 		    
 		    Laser laser = new Laser(
-		        getCenter().add(firingDirection.scale(alturatx)),
-		        firingDirection,
+		        getCenter().add(toPlayer.scale(alturatx)),
+		        toPlayer,
 		        Constants.LASER_VEL,
-		        newAngle + Math.PI/2,
+		        currentAngle + Math.PI/2,
 		        Assets.redLaser,
 		        gameState
 		    );
@@ -107,6 +109,14 @@ public class Ufo extends MovingObject{
 		
 	}
 
+	@Override
+	public void Destroy() {
+		gameState.addScore(Constants.UFO_SCORE);
+		super.Destroy();
+	}
+	
+	
+	
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;

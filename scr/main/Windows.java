@@ -82,7 +82,7 @@ public class Windows extends JFrame implements Runnable{
        gameState.draw(g);
        
        g.setColor(Color.WHITE);
-       g.drawString(""+AVARAGEFPS,40,40);
+       g.drawString("FPS actuales:"+AVARAGEFPS,20,650);
        
        //------------------------------------------
        
