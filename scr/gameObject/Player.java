@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import graphics.Assets;
+import graphics.Sounds;
 import input.KeyBoard;
 import math.Vector2D;
 import states.GameState;
@@ -19,6 +20,9 @@ public class Player extends MovingObject {
 	
 	private boolean spawning,visible;
 	private Chronometer spawnTime,flickerTime;
+	
+	private Sounds shoot;
+	private Sounds explosionNave;
 
 	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState,double scale) {
 		super(position, velocity, maxVel, texture, gameState,scale);
@@ -29,7 +33,8 @@ public class Player extends MovingObject {
 	    flickerTime = new Chronometer();
 	    spawning = false;
 	    visible = true;
-
+	    shoot = new Sounds(Assets.playerShoot);
+	    explosionNave = new Sounds(Assets.explosionNave);
 	}
 	
 	@Override
@@ -64,6 +69,11 @@ public class Player extends MovingObject {
 					Constants.LASER_SCALE
 					));
 			fireRate.run(Constants.FIRERATE);
+			shoot.changeVolumen(Constants.VOULMEN_LASER);
+			shoot.play();
+		}
+		if (shoot.getFramePosition() > 10000) {
+			shoot.stop();
 		}
 		
 		if(KeyBoard.RIGHT) {
@@ -113,6 +123,8 @@ public class Player extends MovingObject {
 	@Override
 	public void Destroy() {
 		spawning = true;
+		explosionNave.playFromPosition(15000);
+		explosionNave.changeVolumen(Constants.VOLUMEN_NAVE_EXPLOSION);
 		spawnTime.run(Constants.SPAWNING_TIME);
 		resetValues();
 		gameState.subtractLife();

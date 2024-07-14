@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import graphics.Assets;
+import graphics.Sounds;
 import math.Vector2D;
 import states.GameState;
 
@@ -17,6 +18,8 @@ public class Ufo extends MovingObject{
 	private int index;
 	private boolean following;
 	private Chronometer fireRate;
+	private Sounds shoot;
+	private Sounds explosionNave;
 	
 	public Ufo(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, ArrayList<Vector2D> path, GameState gameState, double scale) {
 		super(position, velocity, maxVel, texture, gameState,scale);
@@ -25,6 +28,8 @@ public class Ufo extends MovingObject{
 		following = true;
 		fireRate = new Chronometer();
 		fireRate.run(Constants.UFO_FIRE_RATE);
+		shoot =new Sounds(Assets.ufoShoot);
+		explosionNave = new Sounds(Assets.explosionNave); 
 	}
 	
 	private Vector2D pathFollowing() {
@@ -51,6 +56,7 @@ public class Ufo extends MovingObject{
 		desiredVelocity = desiredVelocity.normalize().scale(maxVel);
 		return desiredVelocity.subtract(velocity);
 	}
+	
 
 	@Override
 	public void update() {
@@ -103,18 +109,21 @@ public class Ufo extends MovingObject{
 		    gameState.getMovingObjects().add(0, laser);
 		    
 		    fireRate.run(Constants.UFO_FIRE_RATE);
+		    shoot.changeVolumen(Constants.VOULMEN_LASER);
+		    shoot.play();
 		}
 
 		angle += 0.05;
 		
 		collidesWith();
-		fireRate.update();
-		
-		
+		fireRate.update();		
 	}
+	
 
 	@Override
 	public void Destroy() {
+		explosionNave.changeVolumen(Constants.VOLUMEN_NAVE_EXPLOSION);
+		explosionNave.playFromPosition(15000);
 		gameState.addScore(Constants.UFO_SCORE,position);
 		super.Destroy();
 	}

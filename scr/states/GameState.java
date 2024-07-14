@@ -16,6 +16,7 @@ import gameObject.Size;
 import gameObject.Ufo;
 import graphics.Animation;
 import graphics.Assets;
+import graphics.Sounds;
 import main.Windows;
 import math.Vector2D;
 
@@ -30,13 +31,17 @@ public class GameState {
 	private int lives = 3;
 	
 	private int meteors;
-	private int waves = 1;	
+	private int waves = 1;
+	private Sounds backgroundMusic;
 	
 	public GameState() {
 		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,Assets.player, this,Constants.PlAYER_SCALE);
 		movingObjects.add(player);
 		
 		meteors=1;
+		backgroundMusic = new Sounds(Assets.backgroundMusic);
+		backgroundMusic.changeVolumen(Constants.VOLUMEN_FONDO);
+		backgroundMusic.loop();
 		
 		startWave();
 	

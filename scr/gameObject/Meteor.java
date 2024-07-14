@@ -5,17 +5,21 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import graphics.Assets;
+import graphics.Sounds;
 import math.Vector2D;
 import states.GameState;
 
 public class Meteor extends MovingObject{
 	
 	private Size size;
+	private Sounds explosionMeteor;
 
 	public Meteor(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, Size size,double scale) {
 		super(position, velocity, maxVel, texture, gameState, scale);
 		this.size = size;
 		this.velocity = velocity.scale(maxVel);
+		explosionMeteor = new Sounds(Assets.explosionMeteor);
 	}
 	
 	@Override
@@ -54,6 +58,9 @@ public class Meteor extends MovingObject{
 
 	@Override
 	public void Destroy() {
+		
+		explosionMeteor.play();
+		explosionMeteor.changeVolumen(Constants.VOLUMEN_METEOR);
 		gameState.divideMeteor(this);
 		gameState.addScore(Constants.METEOR_SCORE,position);
 		super.Destroy();

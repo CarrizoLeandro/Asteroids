@@ -2,6 +2,8 @@ package graphics;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
 
+import javax.sound.sampled.Clip;
+
 public class Assets {
 	
 	//nave,enemigo y laser
@@ -25,6 +27,8 @@ public class Assets {
 	public static Font fontBig;
 	public static Font fontMed;
 	
+	//sounds
+	public static Clip backgroundMusic, explosionMeteor,explosionNave, playerLose, playerShoot, ufoShoot;
 	public static void init()
 	{
 		player = Loader.ImageLoader("/ships/playerShip1_blue.png");
@@ -57,6 +61,12 @@ public class Assets {
 		}
 		for(int i = 0; i < numbers.length; i++)
 			numbers[i] = Loader.ImageLoader("/interface/numeral"+i+".png");
+		
+		backgroundMusic = Loader.loadSound("/sounds/2018-09-07-52675.wav");
+		playerShoot = Loader.loadSound("/sounds/laser-gun-shot-sound-future-sci-fi-lazer-wobble-chakongaudio-174883.wav");
+		ufoShoot = Loader.loadSound("/sounds/laser-gun-81720.wav");
+		explosionNave=Loader.loadSound("/sounds/explosion-luna-102514.wav");
+		explosionMeteor=Loader.loadSound("/sounds/small-rock-break-194553.wav");
 		
 		if (player == null || speed == null) {
             System.out.println("Error al cargar la imagen del jugador");

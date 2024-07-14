@@ -35,4 +35,11 @@ public class Constants {
 	public static final long UFO_FIRE_RATE=1000;
 	public static final double UFO_ANGLE_RANGE=Math.PI/2;
 	public static final int UFO_SCORE = 40;
+	
+	//Sonidos
+	public static final float VOLUMEN_FONDO=-20.0f;
+	public static final float VOULMEN_LASER=-25.0f;
+	public static final float VOLUMEN_METEOR=-30.0f;
+	public static final float VOLUMEN_NAVE_EXPLOSION=-20.0f;
+	
 }
