@@ -17,8 +17,10 @@ public abstract class MovingObject extends GameObject{
 	protected int alturatx;
 	
 	protected GameState gameState;
+	protected double scale;
+	protected double collisionRadius;
 	
-	public MovingObject(Vector2D position,Vector2D velocity, double maxVel ,BufferedImage texture,GameState gameState) 
+	public MovingObject(Vector2D position,Vector2D velocity, double maxVel ,BufferedImage texture,GameState gameState, double scale) 
 	{
 		super(position, texture);
 		this.velocity=velocity;
@@ -27,7 +29,15 @@ public abstract class MovingObject extends GameObject{
 		anchotx = texture.getWidth();
 		alturatx = texture.getHeight();
 		angle=0;
+		this.scale = scale;
+
+        // Calcula el radio de colisión escalado
+        double scaledWidth = anchotx * scale;
+        double scaledHeight = alturatx * scale;
+        this.collisionRadius = Math.max(scaledWidth, scaledHeight) / 2.0;
 	}
+	
+	 public abstract double getCollisionRadius();
 	
 	protected void collidesWith() {
 		ArrayList <MovingObject>movingObjects = gameState.getMovingObjects();
@@ -39,7 +49,7 @@ public abstract class MovingObject extends GameObject{
 			}
 			double distance = m.getCenter().subtract(getCenter()).getMagnitude();
 			
-			if(distance < m.anchotx/2 + anchotx/2 && movingObjects.contains(this)) {
+			if(distance < m.getCollisionRadius() && movingObjects.contains(this)) {
 				objectCollision(m,this);
 			}
 		
@@ -62,8 +72,8 @@ public abstract class MovingObject extends GameObject{
 		gameState.getMovingObjects().remove(this);
 	}
 	
-	protected Vector2D getCenter() {
-		return new Vector2D(position.getX()+anchotx/2,position.getY()+alturatx/2);
+	public Vector2D getCenter() {
+		return new Vector2D(position.getX()+anchotx*scale/2,position.getY()+alturatx*scale/2);
 	}
 
 }

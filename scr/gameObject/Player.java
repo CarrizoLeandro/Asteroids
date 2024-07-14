@@ -20,8 +20,8 @@ public class Player extends MovingObject {
 	private boolean spawning,visible;
 	private Chronometer spawnTime,flickerTime;
 
-	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState) {
-		super(position, velocity, maxVel, texture, gameState);
+	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState,double scale) {
+		super(position, velocity, maxVel, texture, gameState,scale);
 		heading=new Vector2D(0,1);
 		acceleration=new Vector2D();
 		fireRate= new Chronometer();
@@ -31,6 +31,12 @@ public class Player extends MovingObject {
 	    visible = true;
 
 	}
+	
+	@Override
+    public double getCollisionRadius() {
+	    return collisionRadius * Constants.PlAYER_SCALE;
+
+    }
 
 	@Override
 	public void update() {
@@ -54,7 +60,8 @@ public class Player extends MovingObject {
 					10,
 					angle,
 					Assets.redLaser,
-					gameState
+					gameState,
+					Constants.LASER_SCALE
 					));
 			fireRate.run(Constants.FIRERATE);
 		}
@@ -127,8 +134,10 @@ public class Player extends MovingObject {
 		
 		Graphics2D g2d = (Graphics2D)g;
 		
-		AffineTransform at1= AffineTransform.getTranslateInstance(position.getX()+ anchotx/2 + 20, position.getY() + alturatx/2+22);
-		AffineTransform at2= AffineTransform.getTranslateInstance(position.getX()+ anchotx/2 - 35, position.getY()+alturatx/2 + 22);
+		AffineTransform at1= AffineTransform.getTranslateInstance(position.getX()+ anchotx*Constants.PlAYER_SCALE/2 + 20*Constants.PlAYER_SCALE, position.getY() + alturatx*Constants.PlAYER_SCALE/2+22*Constants.PlAYER_SCALE);
+		at1.scale(Constants.PlAYER_SCALE, Constants.PlAYER_SCALE);
+		AffineTransform at2= AffineTransform.getTranslateInstance(position.getX()+ anchotx*Constants.PlAYER_SCALE/2 - 35*Constants.PlAYER_SCALE, position.getY()+alturatx*Constants.PlAYER_SCALE/2 + 22*Constants.PlAYER_SCALE);
+		at2.scale(Constants.PlAYER_SCALE, Constants.PlAYER_SCALE);
 		
 		at1.rotate(angle,-20,-22);
 		at2.rotate(angle,+35,-22);
@@ -141,6 +150,7 @@ public class Player extends MovingObject {
 		
 		
 		at= AffineTransform.getTranslateInstance(position.getX(), position.getY());
+		at.scale(Constants.PlAYER_SCALE, Constants.PlAYER_SCALE);
 		at.rotate(angle,anchotx/2,alturatx/2);
 		g2d.drawImage(texture,  at, null);
 	}

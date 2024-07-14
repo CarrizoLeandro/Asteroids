@@ -22,10 +22,10 @@ public class Windows extends JFrame implements Runnable{
     private BufferStrategy bs;
     private Graphics g;
     
-    private final int FPS=60;
+    private final static int FPS=60;
     private double TARGETTIME=1000000000/FPS;
     private double delta=0;
-    private int AVARAGEFPS=FPS;
+    public static int AVARAGEFPS=FPS;
     
     private GameState gameState;
     private KeyBoard keyBoard;
@@ -80,10 +80,7 @@ public class Windows extends JFrame implements Runnable{
        g.fillRect(0, 0, Constants.ANCHO, Constants.ALTO);
        
        gameState.draw(g);
-       
-       g.setColor(Color.WHITE);
-       g.drawString("FPS actuales:"+AVARAGEFPS,20,650);
-       
+   
        //------------------------------------------
        
        g.dispose();
@@ -95,6 +92,10 @@ public class Windows extends JFrame implements Runnable{
 	   gameState=new GameState();
 	   
    }
+   public void drawFPS(Graphics g) {
+	    g.setColor(Color.WHITE);
+	    g.drawString("FPS actuales: " + AVARAGEFPS, 20, 650);
+	}
   
     @Override
     public void run() {

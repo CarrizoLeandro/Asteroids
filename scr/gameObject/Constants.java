@@ -3,6 +3,12 @@ package gameObject;
 import graphics.Assets;
 
 public class Constants {
+	
+	
+	public static final double METEOR_SCALE = 1.5, PlAYER_SCALE=0.8;  
+    public static final double UFO_SCALE = 1.0, LASER_SCALE=1.0;     
+	
+	
 	// frame dimensions
 	public static final int ANCHO=1200,ALTO=700;	
 	//player properties

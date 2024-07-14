@@ -1,5 +1,6 @@
 package states;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -7,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import gameObject.Constants;
+import gameObject.Messege;
 import gameObject.Meteor;
 import gameObject.MovingObject;
 import gameObject.Player;
@@ -14,6 +16,7 @@ import gameObject.Size;
 import gameObject.Ufo;
 import graphics.Animation;
 import graphics.Assets;
+import main.Windows;
 import math.Vector2D;
 
 public class GameState {
@@ -21,16 +24,16 @@ public class GameState {
 	private Player player;
 	private ArrayList <MovingObject> movingObjects = new ArrayList<MovingObject>();
 	private ArrayList <Animation> explosion = new ArrayList<Animation>();
+	private ArrayList <Messege> messeges = new ArrayList<Messege>();
 	
 	private int score = 0;
 	private int lives = 3;
 	
 	private int meteors;
-
-	
+	private int waves = 1;	
 	
 	public GameState() {
-		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,Assets.player, this);
+		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,Assets.player, this,Constants.PlAYER_SCALE);
 		movingObjects.add(player);
 		
 		meteors=1;
@@ -40,8 +43,9 @@ public class GameState {
 	}
 	
 	
-	public void addScore(int value) {
+	public void addScore(int value, Vector2D position) {
 		score+= value;
+		messeges.add(new Messege(position, true, "+"+value+" score", Color.WHITE, false, Assets.fontMed, this));
 	}
 	
 	
@@ -73,7 +77,8 @@ public class GameState {
 					Constants.METEOR_VEL*(Math.random() * 2 + 1),
 					textures[(int)(Math.random()*textures.length)],
 					this,
-					newSize
+					newSize,
+					Constants.METEOR_SCALE
 					));
 		}
 		
@@ -81,25 +86,26 @@ public class GameState {
 	}
 	
 	private void startWave() {
-		double x, y ;
+		messeges.add(new Messege(new Vector2D(Constants.ANCHO/2,Constants.ALTO/2),true, "Wave " + waves, Color.WHITE, true, Assets.fontBig, this));
 		
 		for(int i =0; i < meteors ; i ++) {
-			x= i % 2 == 0 ? Math.random()*Constants.ANCHO:0;
-			y=i % 2 == 0 ? 0 : Math.random()*Constants.ALTO;
+			Vector2D position = generateRandomPosition();
 			
 			BufferedImage texture = Assets.bigs[(int)(Math.random()*Assets.bigs.length)];
 			
 			movingObjects.add(new Meteor(
-					new Vector2D (x,y),
+					position,
 					new Vector2D (0,1).setDirection(Math.random()*Math.PI*2),
 					Constants.METEOR_VEL*Math.random()+1,
 					texture,
 					this,
-					Size.BIG
+					Size.BIG,
+					Constants.METEOR_SCALE
 					));
 			
 		}
 		meteors++;
+		waves++;
 		spawnUfo();
 	}
 	
@@ -111,11 +117,36 @@ public class GameState {
 				));
 	}
 	
+	private boolean isPositionValid(Vector2D position, double minDistance) {
+	    for (MovingObject obj : movingObjects) {
+	        if (obj != null && obj.getPosition().subtract(position).getMagnitude() < minDistance) {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
+	private Vector2D generateRandomPosition() {
+	    boolean validPosition = false;
+	    int attempts = 0;
+	    Vector2D position = new Vector2D(0, 0);
+
+	    while (!validPosition && attempts < 100) {
+	        int rand = (int) (Math.random() * 2);
+
+	        double x = rand == 0 ? (Math.random() * Constants.ANCHO) : 0;
+	        double y = rand == 0 ? 0 : (Math.random() * Constants.ALTO);
+
+	        position = new Vector2D(x, y);
+	        validPosition = isPositionValid(position, 200); // 100 es la distancia mínima entre objetos
+	        attempts++;
+	    }
+
+	    return position;
+	}
+	
 	private void spawnUfo() {
-		int rand = (int) (Math.random()*2);
-		
-		double x = rand == 0 ? (Math.random()*Constants.ANCHO) : 0;
-		double y = rand == 0 ? 0 : (Math.random()*Constants.ALTO);
+		Vector2D position = generateRandomPosition();
 		
 		ArrayList<Vector2D> path = new ArrayList<Vector2D>();
 		
@@ -138,12 +169,13 @@ public class GameState {
 		path.add(new Vector2D(posX,posY));
 		
 		movingObjects.add(new Ufo(
-				new Vector2D(x,y),
+				position,
 				new Vector2D(),
 				Constants.UFO_MAX_VEL,
 				Assets.ufo,
 				path,
-				this
+				this,
+				Constants.UFO_SCALE
 				));
 		
 	}
@@ -151,7 +183,6 @@ public class GameState {
 	
 	
 	public void update() {
-		
 		for(int i =0; i < movingObjects.size();i++) {
 			movingObjects.get(i).update();
 		}
@@ -169,12 +200,22 @@ public class GameState {
 				return;
 			}
 		}
+		
+		
 		startWave();
 	}
+	public void drawFPS(Graphics g) {
+	    g.setColor(Color.WHITE);
+	    g.drawString("FPS actuales: " + Windows.AVARAGEFPS, 20, 650);
+	}
 	public void draw(Graphics g) {
+		drawFPS(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
+		
+		for(int i = 0; i < messeges.size();i++) {
+			messeges.get(i).draw(g2d);
+		}
 		for(int i =0; i < movingObjects.size();i++) {
 			movingObjects.get(i).draw(g);
 		}
@@ -186,6 +227,7 @@ public class GameState {
 		}
 		drawScore(g);
 		drawLives(g);
+		 // Dibuja el contador de FPS
 	}
 	
 	private void drawScore(Graphics g) {
@@ -225,6 +267,10 @@ public class GameState {
 	
 	public ArrayList<MovingObject> getMovingObjects() {
 		return movingObjects;
+	}
+	
+	public ArrayList<Messege> getMesseges(){
+		return messeges;
 	}
 	
 	public Player getPlayer() {

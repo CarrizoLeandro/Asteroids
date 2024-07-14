@@ -1,5 +1,5 @@
 package graphics;
-import java.awt.Image;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 public class Assets {
@@ -21,6 +21,10 @@ public class Assets {
 	//explosion
 	public static BufferedImage[]exp=new BufferedImage[9];
 	
+	//fonts
+	public static Font fontBig;
+	public static Font fontMed;
+	
 	public static void init()
 	{
 		player = Loader.ImageLoader("/ships/playerShip1_blue.png");
@@ -31,6 +35,10 @@ public class Assets {
 		
 		ufo = Loader.ImageLoader("/ships/enemy/ufoRed.png");
 		life = Loader.ImageLoader("/interface/playerLife1_blue.png");
+		
+		fontBig = Loader.loadFont("/fonts/kenvector_future.ttf", 42);
+		fontMed = Loader.loadFont("/fonts/kenvector_future.ttf", 20);
+		
 		for (int i = 0;i<bigs.length;i++) {
 			bigs[i] = Loader.ImageLoader("/meteors/meteorBrown_big"+(i+1)+".png");
 		}

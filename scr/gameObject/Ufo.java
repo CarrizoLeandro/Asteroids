@@ -1,6 +1,5 @@
 package gameObject;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -19,8 +18,8 @@ public class Ufo extends MovingObject{
 	private boolean following;
 	private Chronometer fireRate;
 	
-	public Ufo(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, ArrayList<Vector2D> path, GameState gameState) {
-		super(position, velocity, maxVel, texture, gameState);
+	public Ufo(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, ArrayList<Vector2D> path, GameState gameState, double scale) {
+		super(position, velocity, maxVel, texture, gameState,scale);
 		this.path = path;
 		index=0;
 		following = true;
@@ -42,7 +41,11 @@ public class Ufo extends MovingObject{
 		return seekForce(currentNode);
 	}
 	
-	
+	@Override
+    public double getCollisionRadius() {
+	    return collisionRadius;
+
+    }
 	private Vector2D seekForce(Vector2D target) {
 		Vector2D desiredVelocity = target.subtract(getCenter());
 		desiredVelocity = desiredVelocity.normalize().scale(maxVel);
@@ -94,7 +97,8 @@ public class Ufo extends MovingObject{
 		        Constants.LASER_VEL,
 		        currentAngle + Math.PI/2,
 		        Assets.redLaser,
-		        gameState
+		        gameState,
+		        Constants.UFO_SCALE
 		    );
 		    gameState.getMovingObjects().add(0, laser);
 		    
@@ -111,7 +115,7 @@ public class Ufo extends MovingObject{
 
 	@Override
 	public void Destroy() {
-		gameState.addScore(Constants.UFO_SCORE);
+		gameState.addScore(Constants.UFO_SCORE,position);
 		super.Destroy();
 	}
 	

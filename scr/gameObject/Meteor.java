@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import graphics.Assets;
 import math.Vector2D;
 import states.GameState;
 
@@ -13,12 +12,26 @@ public class Meteor extends MovingObject{
 	
 	private Size size;
 
-	public Meteor(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, Size size) {
-		super(position, velocity, maxVel, texture, gameState);
+	public Meteor(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, Size size,double scale) {
+		super(position, velocity, maxVel, texture, gameState, scale);
 		this.size = size;
 		this.velocity = velocity.scale(maxVel);
 	}
-
+	
+	@Override
+    public double getCollisionRadius() {
+        switch (size) {
+            case BIG:
+                return collisionRadius;
+            case MED:
+                return collisionRadius;
+            case SMALL:
+                return collisionRadius;
+            default:
+                return collisionRadius;
+        }
+    }
+		
 	@Override
 	public void update() {
 		position = position.add(velocity);
@@ -42,7 +55,7 @@ public class Meteor extends MovingObject{
 	@Override
 	public void Destroy() {
 		gameState.divideMeteor(this);
-		gameState.addScore(Constants.METEOR_SCORE);
+		gameState.addScore(Constants.METEOR_SCORE,position);
 		super.Destroy();
 	}
 	
@@ -51,10 +64,9 @@ public class Meteor extends MovingObject{
 	public void draw(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		
-		double scaleFactor = 1.5;
 		
 		at= AffineTransform.getTranslateInstance(position.getX(), position.getY());
-		at.scale(scaleFactor, scaleFactor);
+		at.scale(Constants.METEOR_SCALE, Constants.METEOR_SCALE);
 		at.rotate(angle,anchotx/2,alturatx/2);
 		
 		g2d.drawImage(texture,  at, null);
