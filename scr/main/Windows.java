@@ -10,12 +10,13 @@ import javax.swing.JFrame;
 import gameObject.Constants;
 import graphics.Assets;
 import input.KeyBoard;
-import states.GameState;
+import input.MouseInput;
+import states.MenuState;
+import states.State;
 
 public class Windows extends JFrame implements Runnable{
-
- 
-    private Canvas canvas;
+	private static final long serialVersionUID = 1L;
+	private Canvas canvas;
     private Thread thread;
     private boolean running=false;
     
@@ -27,8 +28,8 @@ public class Windows extends JFrame implements Runnable{
     private double delta=0;
     public static int AVARAGEFPS=FPS;
     
-    private GameState gameState;
     private KeyBoard keyBoard;
+    private MouseInput mouseInput;
     
     public Windows() {
         setTitle("Space Invader");
@@ -39,8 +40,8 @@ public class Windows extends JFrame implements Runnable{
         
         
         canvas = new Canvas();
-        
         keyBoard= new KeyBoard();
+        mouseInput = new MouseInput();
         
         canvas.setPreferredSize(new Dimension(Constants.ANCHO,Constants.ALTO));
         canvas.setMaximumSize(new Dimension(Constants.ANCHO,Constants.ALTO));
@@ -49,6 +50,8 @@ public class Windows extends JFrame implements Runnable{
    
         add(canvas);
         canvas.addKeyListener(keyBoard);
+        canvas.addMouseListener(mouseInput); //Agrega popiedad para recibir y guardar botones del mouse
+        canvas.addMouseMotionListener(mouseInput);//Agrega priedad para recibir y guardar movimiento del mouse
         
         setVisible(true);
         
@@ -62,7 +65,7 @@ public class Windows extends JFrame implements Runnable{
    
    
    private void update(){
-       gameState.update();
+	   State.getCurrentState().update();
        keyBoard.update();
    }
    
@@ -76,10 +79,9 @@ public class Windows extends JFrame implements Runnable{
        
        //-----------------------------------------
       
-       g.setColor(Color.BLACK);
-       g.fillRect(0, 0, Constants.ANCHO, Constants.ALTO);
+
        
-       gameState.draw(g);
+       State.getCurrentState().draw(g);
    
        //------------------------------------------
        
@@ -89,7 +91,8 @@ public class Windows extends JFrame implements Runnable{
 
    private void init() {
 	   Assets.init();
-	   gameState=new GameState();
+	   
+	   State.changeState(new MenuState());
 	   
    }
    public void drawFPS(Graphics g) {

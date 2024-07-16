@@ -20,7 +20,7 @@ import graphics.Sounds;
 import main.Windows;
 import math.Vector2D;
 
-public class GameState {
+public class GameState extends State {
 	
 	private Player player;
 	private ArrayList <MovingObject> movingObjects = new ArrayList<MovingObject>();
@@ -29,7 +29,7 @@ public class GameState {
 	
 	private int score = 0;
 	private int lives = 3;
-	
+	private static int naveColorIndex;
 	private int meteors;
 	private int waves = 1;
 	private Sounds backgroundMusic;
@@ -42,6 +42,7 @@ public class GameState {
 		backgroundMusic = new Sounds(Assets.backgroundMusic);
 		backgroundMusic.changeVolumen(Constants.VOLUMEN_FONDO);
 		backgroundMusic.loop();
+		naveColorIndex=0;
 		
 		startWave();
 	
@@ -50,7 +51,7 @@ public class GameState {
 	
 	public void addScore(int value, Vector2D position) {
 		score+= value;
-		messeges.add(new Messege(position, true, "+"+value+" score", Color.WHITE, false, Assets.fontMed, this));
+		messeges.add(new Messege(position, "+"+value+" score", Color.WHITE, false, Assets.fontMed, this,"fade"));
 	}
 	
 	
@@ -91,7 +92,7 @@ public class GameState {
 	}
 	
 	private void startWave() {
-		messeges.add(new Messege(new Vector2D(Constants.ANCHO/2,Constants.ALTO/2),true, "Wave " + waves, Color.WHITE, true, Assets.fontBig, this));
+		messeges.add(new Messege(new Vector2D(Constants.ANCHO/2,Constants.ALTO/2), "Wave " + waves, Color.WHITE, true, Assets.fontBig, this,"fade"));
 		
 		for(int i =0; i < meteors ; i ++) {
 			Vector2D position = generateRandomPosition();
@@ -214,6 +215,9 @@ public class GameState {
 	    g.drawString("FPS actuales: " + Windows.AVARAGEFPS, 20, 650);
 	}
 	public void draw(Graphics g) {
+		g.drawImage(Assets.background, 0, 0, Constants.ANCHO,Constants.ALTO, null);
+		
+		
 		drawFPS(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -230,9 +234,9 @@ public class GameState {
 			g2d.drawImage(anim.getCurrentFrame(),(int)anim.getPosition().getX(),(int) anim.getPosition().getY(),null);
 			
 		}
+		
 		drawScore(g);
 		drawLives(g);
-		 // Dibuja el contador de FPS
 	}
 	
 	private void drawScore(Graphics g) {
@@ -250,29 +254,40 @@ public class GameState {
 	}
 	
 	private void drawLives(Graphics g) {
-		Vector2D livePosition = new Vector2D(25,25);
-		g.drawImage(Assets.life,(int)livePosition.getX(),(int)livePosition.getY(), null);
-		g.drawImage(Assets.numbers[10],(int)livePosition.getX()+40,(int)livePosition.getY()+5,null);
-		String livesToString = Integer.toString(lives);
-		Vector2D pos = new Vector2D(livePosition.getX(), livePosition.getY());
+		Vector2D livePosition = new Vector2D(25, 25);
+	    g.drawImage(Assets.life, (int) livePosition.getX(), (int) livePosition.getY(), null);
+	    g.drawImage(Assets.numbers[10], (int) livePosition.getX() + 40, (int) livePosition.getY() + 5, null);
+
+	    String livesToString = Integer.toString(lives);
+	    Vector2D pos = new Vector2D(livePosition.getX() + 60, livePosition.getY() + 5);
+
+	    for (int i = 0; i < livesToString.length(); i++) {
+	        int number = Integer.parseInt(livesToString.substring(i, i + 1));
+	        g.drawImage(Assets.numbers[number], (int) pos.getX(), (int) pos.getY(), null);
+	        pos.setX(pos.getX() + 20);
+	    }
 		
-		for(int i = 0; i < livesToString.length(); i ++)
-		{
-			int number = Integer.parseInt(livesToString.substring(i, i+1));
-			
-			if(number <= 0)
-				break;
-			g.drawImage(Assets.numbers[number],
-					(int)pos.getX() + 60, (int)pos.getY() + 5, null);
-			pos.setX(pos.getX() + 20);
+	}
+	
+	public static void changeNaveColor() {
+		naveColorIndex++;
+		if (naveColorIndex > 11) {
+			naveColorIndex=0;
 		}
-		
+	}
+	
+	public static int getNaveColor() {
+		return naveColorIndex;
 	}
 	
 	
 	public ArrayList<MovingObject> getMovingObjects() {
 		return movingObjects;
 	}
+	
+	public void addMessage(Messege message) {
+        messeges.add(message);
+    }
 	
 	public ArrayList<Messege> getMesseges(){
 		return messeges;
@@ -283,5 +298,8 @@ public class GameState {
 	}
 	public void subtractLife() {
 		lives --;
+	}
+	public int getLives() {
+		return lives;
 	}
 }

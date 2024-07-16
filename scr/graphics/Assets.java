@@ -1,13 +1,18 @@
 package graphics;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.sound.sampled.Clip;
 
 public class Assets {
 	
+	//Fondo de pantalla
+	public static BufferedImage background;
+	
 	//nave,enemigo y laser
 	public static BufferedImage player,speed,blueLaser,greenLaser,redLaser,ufo;
+	public static ArrayList<BufferedImage> naveColorIndex = new ArrayList<>();
 	
 	//naves
 	public static BufferedImage[]bigs = new BufferedImage[4];
@@ -18,6 +23,8 @@ public class Assets {
 	//Interface
 	public static BufferedImage[]numbers=new BufferedImage[11];
 	public static BufferedImage life;
+	public static BufferedImage grayBotton,blueBotton;
+	
 	
 	
 	//explosion
@@ -31,7 +38,7 @@ public class Assets {
 	public static Clip backgroundMusic, explosionMeteor,explosionNave, playerLose, playerShoot, ufoShoot;
 	public static void init()
 	{
-		player = Loader.ImageLoader("/ships/playerShip1_blue.png");
+		player = Loader.ImageLoader("/ships/playerShip1.png");
 		speed = Loader.ImageLoader("/efectos/fire08.png");
 		blueLaser = Loader.ImageLoader("/Lasers/laserBlue01.png");
 		greenLaser = Loader.ImageLoader("/Lasers/laserGreen11.png");
@@ -43,6 +50,15 @@ public class Assets {
 		fontBig = Loader.loadFont("/fonts/kenvector_future.ttf", 42);
 		fontMed = Loader.loadFont("/fonts/kenvector_future.ttf", 20);
 		
+		grayBotton = Loader.ImageLoader("/UI/button_gray_rectangle_gradient.png");
+		blueBotton = Loader.ImageLoader("/UI/button-blue_rectangle_gradient.png");
+		
+		background = Loader.ImageLoader("/background.jpg");
+		
+		
+		for (int i = 1 ; i<= 12 ; i++) {
+			naveColorIndex.add(Loader.ImageLoader("/ships/playerShip" + i + ".png"));
+		}
 		for (int i = 0;i<bigs.length;i++) {
 			bigs[i] = Loader.ImageLoader("/meteors/meteorBrown_big"+(i+1)+".png");
 		}
@@ -73,6 +89,10 @@ public class Assets {
         } else {
             System.out.println("Imagen del jugador cargada exitosamente");
         }
+	}
+	
+	public static ArrayList<BufferedImage> getNaveColorIndex() {
+		return naveColorIndex;
 	}
 
 	

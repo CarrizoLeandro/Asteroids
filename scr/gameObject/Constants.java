@@ -18,7 +18,7 @@ public class Constants {
 	public static final double DELTAANGLE=0.1;
 	public static final double ACC=0.2;
 	public static final double PLAYER_MAX_VEL =7.0;
-	public static final long SPAWNING_TIME=3000;
+	public static final long SPAWNING_TIME=1500;
 	public static final long FLICKER_TIME=200;
 	
 	//Laser properties
@@ -41,5 +41,9 @@ public class Constants {
 	public static final float VOULMEN_LASER=-25.0f;
 	public static final float VOLUMEN_METEOR=-30.0f;
 	public static final float VOLUMEN_NAVE_EXPLOSION=-20.0f;
+	
+	//gameState
+	public static final String PLAY= "PLAY";
+	public static final String EXIT= "EXIT";
 	
 }

@@ -1,5 +1,6 @@
 package gameObject;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -122,18 +123,39 @@ public class Player extends MovingObject {
 	
 	@Override
 	public void Destroy() {
-		spawning = true;
-		explosionNave.playFromPosition(15000);
-		explosionNave.changeVolumen(Constants.VOLUMEN_NAVE_EXPLOSION);
-		spawnTime.run(Constants.SPAWNING_TIME);
-		resetValues();
-		gameState.subtractLife();
+		if(gameState.getLives() >= 2) {
+			spawning = true;
+			explosionNave.playFromPosition(15000);
+			explosionNave.changeVolumen(Constants.VOLUMEN_NAVE_EXPLOSION);
+			spawnTime.run(Constants.SPAWNING_TIME);
+			resetValues();
+			gameState.subtractLife();
+		} else {
+			gameState.subtractLife();
+			
+			gameLose();
+		}
 	}
 	
 	private void resetValues(){
 		angle=0;
 		velocity=new Vector2D();
 		position =new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY);
+	}
+	
+	private void gameLose() {
+		{
+	        gameState.getMovingObjects().remove(this);
+	        gameState.addMessage(new Messege(
+	            new Vector2D(Constants.ANCHO / 2, Constants.ALTO / 2),
+	          	"Has perdido",
+	          	Color.RED,
+	          	true,
+	          	Assets.fontBig,
+	          	gameState,
+	          	"noFade"
+	        ));
+	    }
 	}
 	
 

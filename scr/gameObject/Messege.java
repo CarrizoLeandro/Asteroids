@@ -16,41 +16,54 @@ public class Messege {
 	private Vector2D position;
 	private Color color;
 	private boolean center;
-	private boolean fade;
+
+	private String effectType;
 	private Font font;
 	private final float deltaAlpha= 0.01f;
 	
-	public Messege(Vector2D position, boolean fade, String text, Color color, boolean center, Font font, GameState gameState) {
+	public Messege(Vector2D position, String text, Color color, boolean center, Font font, GameState gameState,String effectType) {
 		this.font = font;
 		this.gameState = gameState;
 		this.text = text;
 		this.position = position;
-		this.fade = fade;
 		this.color = color;
 		this.center = center;
+		this.effectType = effectType;
 		
-		if(fade) {
-			alpha =1;
-		}else {
-			alpha = 0;
-		}
+		alpha=1;
 	}
 	public void draw(Graphics2D g2d) {
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-		Text.drawText(g2d, text, position, center, color, font);
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 		
-		position.setY(position.getY() - 1);
-		
-		if(fade) {
-			alpha -= deltaAlpha;
-		}else {
-			alpha += deltaAlpha;
-		}
-		
-		if (fade && alpha < 0 || !fade && alpha > 1) {
-			gameState.getMesseges().remove(this);
-		}
+		 switch (effectType) {
+         case "fade":
+             fadeEffect(g2d);
+             break;
+         case "noFade":
+             noFadeEffect(g2d);
+             break;
+         default:
+             Text.drawText(g2d, text, position, center, color, font);
+             break;
+		 	}
 	}
+	
+	private void fadeEffect(Graphics2D g2d) {
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+        Text.drawText(g2d, text, position, center, color, font);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
+        position.setY(position.getY() - 1);
+        alpha -= deltaAlpha;
+
+        if (alpha < 0) {
+            gameState.getMesseges().remove(this);
+        }
+    }
+	
+	
+	 private void noFadeEffect(Graphics2D g2d) {
+	        Text.drawText(g2d, text, position, center, color, font);
+	    }
+	 
 
 }
