@@ -35,7 +35,7 @@ public class Assets {
 	public static Font fontMed;
 	
 	//sounds
-	public static Clip backgroundMusic, explosionMeteor,explosionNave, playerLose, playerShoot, ufoShoot;
+	public static Clip backgroundMusic, explosionMeteor,explosionNave, playerLose, playerShoot, ufoShoot,menuMusic;
 	public static void init()
 	{
 		player = Loader.ImageLoader("/ships/playerShip1.png");
@@ -54,6 +54,8 @@ public class Assets {
 		blueBotton = Loader.ImageLoader("/UI/button-blue_rectangle_gradient.png");
 		
 		background = Loader.ImageLoader("/background.jpg");
+		
+		
 		
 		
 		for (int i = 1 ; i<= 12 ; i++) {
@@ -83,6 +85,7 @@ public class Assets {
 		ufoShoot = Loader.loadSound("/sounds/laser-gun-81720.wav");
 		explosionNave=Loader.loadSound("/sounds/explosion-luna-102514.wav");
 		explosionMeteor=Loader.loadSound("/sounds/small-rock-break-194553.wav");
+		menuMusic= Loader.loadSound("/sounds/gamemusic-6082.wav");
 		
 		if (player == null || speed == null) {
             System.out.println("Error al cargar la imagen del jugador");

@@ -35,9 +35,10 @@ public class GameState extends State {
 	private Sounds backgroundMusic;
 	
 	public GameState() {
-		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,Assets.player, this,Constants.PlAYER_SCALE);
+		naveColorIndex = getNaveColor();
+	    BufferedImage playerImage = Assets.getNaveColorIndex().get(naveColorIndex);
+		player = new Player(new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),new Vector2D(),5,playerImage, this,Constants.PlAYER_SCALE);
 		movingObjects.add(player);
-		
 		meteors=1;
 		backgroundMusic = new Sounds(Assets.backgroundMusic);
 		backgroundMusic.changeVolumen(Constants.VOLUMEN_FONDO);
@@ -271,7 +272,7 @@ public class GameState extends State {
 	
 	public static void changeNaveColor() {
 		naveColorIndex++;
-		if (naveColorIndex > 11) {
+		if (naveColorIndex > Assets.getNaveColorIndex().size()) {
 			naveColorIndex=0;
 		}
 	}

@@ -6,14 +6,18 @@ import java.util.ArrayList;
 
 import gameObject.Constants;
 import graphics.Assets;
+import graphics.Sounds;
 import ui.Action;
 import ui.Button;
 
 public class MenuState extends State{
 
 	private ArrayList <Button> buttons;
-	
+	private Sounds menuMusic;
 	public MenuState() {
+		menuMusic= new Sounds(Assets.menuMusic);
+		menuMusic.changeVolumen(Constants.VOLUMEN_FONDO);
+		menuMusic.loop();
 		buttons = new ArrayList<Button>();
 		
 		buttons.add(new Button (
@@ -25,6 +29,7 @@ public class MenuState extends State{
 				new Action() {
 					@Override
 					public void doAction() {
+						menuMusic.stop();
 						State.changeState(new GameState());
 					}}
 				));
