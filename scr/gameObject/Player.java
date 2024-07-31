@@ -10,7 +10,9 @@ import graphics.Assets;
 import graphics.Sounds;
 import input.KeyBoard;
 import math.Vector2D;
+import states.GameOverState;
 import states.GameState;
+import states.State;
 
 public class Player extends MovingObject {
 
@@ -43,6 +45,22 @@ public class Player extends MovingObject {
 	    return collisionRadius * Constants.PlAYER_SCALE;
 
     }
+	
+	public boolean collidesWith(MovingObject other) {
+	    double distance = getCenter().subtract(other.getCenter()).getMagnitude();
+	    double combinedRadius = getCollisionRadius() + other.getCollisionRadius();
+
+	    if (distance < combinedRadius) {
+	        if (other instanceof PowerUp) {
+	            ((PowerUp) other).applyEffect(this);
+	            return false; // No destruir la nave cuando colisiona con un PowerUp
+	        }
+	        return true;
+	    }
+	    return false;
+	}
+
+
 
 	@Override
 	public void update() {
@@ -133,7 +151,7 @@ public class Player extends MovingObject {
 		} else {
 			gameState.subtractLife();
 			
-			gameLose();
+			State.changeState(new GameOverState());
 		}
 	}
 	
@@ -143,22 +161,6 @@ public class Player extends MovingObject {
 		position =new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY);
 	}
 	
-	private void gameLose() {
-		{
-	        gameState.getMovingObjects().remove(this);
-	        gameState.addMessage(new Messege(
-	            new Vector2D(Constants.ANCHO / 2, Constants.ALTO / 2),
-	          	"Has perdido",
-	          	Color.RED,
-	          	true,
-	          	Assets.fontBig,
-	          	gameState,
-	          	"noFade"
-	        ));
-	    }
-	}
-	
-
 	@Override
 	public void draw(Graphics g) {
 		
@@ -192,4 +194,9 @@ public class Player extends MovingObject {
 	public boolean isSpawning() {
 		return spawning;
 	}
+
+	public void addLife() {
+	    gameState.addLife();
+	}
+
 }

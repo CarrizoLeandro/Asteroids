@@ -14,6 +14,10 @@ public class Assets {
 	public static BufferedImage player,speed,blueLaser,greenLaser,redLaser,ufo;
 	public static ArrayList<BufferedImage> naveColorIndex = new ArrayList<>();
 	
+	//powerUps
+	public static BufferedImage extraLife;
+	
+	
 	//naves
 	public static BufferedImage[]bigs = new BufferedImage[4];
 	public static BufferedImage[]meds = new BufferedImage[2];
@@ -56,7 +60,7 @@ public class Assets {
 		background = Loader.ImageLoader("/background.jpg");
 		
 		
-		
+		extraLife =Loader.ImageLoader("/powerUp/pill_green.png");
 		
 		for (int i = 1 ; i<= 12 ; i++) {
 			naveColorIndex.add(Loader.ImageLoader("/ships/playerShip" + i + ".png"));

@@ -8,10 +8,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import gameObject.Constants;
+import gameObject.ExtraLifePowerUp;
 import gameObject.Messege;
 import gameObject.Meteor;
 import gameObject.MovingObject;
 import gameObject.Player;
+import gameObject.PowerUp;
 import gameObject.Size;
 import gameObject.Ufo;
 import graphics.Animation;
@@ -26,6 +28,7 @@ public class GameState extends State {
 	private ArrayList <MovingObject> movingObjects = new ArrayList<MovingObject>();
 	private ArrayList <Animation> explosion = new ArrayList<Animation>();
 	private ArrayList <Messege> messeges = new ArrayList<Messege>();
+	private ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 	
 	private int score = 0;
 	private int lives = 3;
@@ -46,10 +49,27 @@ public class GameState extends State {
 		naveColorIndex=0;
 		
 		startWave();
+		
+		generatePowerUp();
 	
 	}
 	
 	
+	private void generatePowerUp() {
+	    Vector2D position = generateRandomPosition();
+	    Vector2D velocity = new Vector2D(Math.random() * 2 - 1, Math.random() * 2 - 1).normalize().scale(0.5);
+	    
+	    movingObjects.add(new ExtraLifePowerUp(
+	            position,
+	            velocity,
+	            1,
+	            Assets.extraLife,
+	            this,
+	            1.0
+	    ));
+	}
+
+
 	public void addScore(int value, Vector2D position) {
 		score+= value;
 		messeges.add(new Messege(position, "+"+value+" score", Color.WHITE, false, Assets.fontMed, this,"fade"));
@@ -194,6 +214,18 @@ public class GameState extends State {
 			movingObjects.get(i).update();
 		}
 		
+		for (int i = 0; i < powerUps.size(); i++) {
+		    PowerUp powerUp = powerUps.get(i);
+		    powerUp.update();
+
+		    if (player.collidesWith(powerUp)) {
+		        powerUp.applyEffect(player);
+		        powerUps.remove(i);  // Eliminar el power-up de la lista después de aplicar el efecto
+		        i--;  // Ajustar el índice debido a la eliminación del elemento
+		    }
+		}
+		
+
 		for(int i =0; i < explosion.size();i++) {
 			Animation anim = explosion.get(i);
 			anim.update();
@@ -297,9 +329,14 @@ public class GameState extends State {
 	public Player getPlayer() {
 		return player;
 	}
-	public void subtractLife() {
-		lives --;
+	public void addLife() {
+	    lives++;
 	}
+
+	public void subtractLife() {
+	    lives--;
+	}
+
 	public int getLives() {
 		return lives;
 	}

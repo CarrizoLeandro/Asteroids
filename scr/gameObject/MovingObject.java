@@ -39,7 +39,7 @@ public abstract class MovingObject extends GameObject{
 	
 	 public abstract double getCollisionRadius();
 	
-	protected void collidesWith() {
+	public void collidesWith() {
 		ArrayList <MovingObject>movingObjects = gameState.getMovingObjects();
 		
 		for (int i = 0; i < movingObjects.size();i++) {
@@ -57,16 +57,52 @@ public abstract class MovingObject extends GameObject{
 	}
 	
 	private void objectCollision(MovingObject a, MovingObject b) {
-		if (a instanceof Player && ((Player)a).isSpawning() || b instanceof Player && ((Player)b).isSpawning()) {
-			return;
-		}
 		
-		if (!(a instanceof Meteor && b instanceof Meteor)) {
-			gameState.playExplosion(getCenter());
-			a.Destroy();
-			b.Destroy();
-		}
+	    if (a instanceof Player && ((Player) a).isSpawning() || b instanceof Player && ((Player) b).isSpawning()) {
+	        return;
+	    }
+
+	    if (a instanceof PowerUp || b instanceof PowerUp) {
+	        if (a instanceof PowerUp) {
+	            PowerUp powerUp = (PowerUp) a;
+	            if (b instanceof Player) {
+	                Player player = (Player) b;
+	                powerUp.applyEffect(player);
+	                powerUp.Destroy();
+	            }
+	        } else if (b instanceof PowerUp) {
+	            PowerUp powerUp = (PowerUp) b;
+	            if (a instanceof Player) {
+	                Player player = (Player) a;
+	                powerUp.applyEffect(player);
+	                powerUp.Destroy();
+	            }
+	        }
+	        return; 
+	    }
+
+	    if (a instanceof Laser || b instanceof Laser) {
+	        if (a instanceof Laser) {
+	            Laser laser = (Laser) a;
+	            if (b instanceof PowerUp) {
+	                return;
+	            }
+	        } else if (b instanceof Laser) {
+	            Laser laser = (Laser) b;
+	            if (a instanceof PowerUp) {
+	                return;
+	            }
+	        }
+	    }
+
+
+	    if (!(a instanceof Meteor && b instanceof Meteor)) {
+	        gameState.playExplosion(getCenter());
+	        a.Destroy();
+	        b.Destroy();
+	    }
 	}
+
 	
 	protected void Destroy() {
 		gameState.getMovingObjects().remove(this);
