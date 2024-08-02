@@ -16,6 +16,7 @@ public class Assets {
 	
 	//powerUps
 	public static BufferedImage extraLife;
+	public static BufferedImage extraLaser;
 	
 	
 	//naves
@@ -61,7 +62,7 @@ public class Assets {
 		
 		
 		extraLife =Loader.ImageLoader("/powerUp/pill_green.png");
-		
+		extraLaser =Loader.ImageLoader("/powerUp/bolt_bronze.png");
 		for (int i = 1 ; i<= 12 ; i++) {
 			naveColorIndex.add(Loader.ImageLoader("/ships/playerShip" + i + ".png"));
 		}

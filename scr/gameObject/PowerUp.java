@@ -2,7 +2,6 @@ package gameObject;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import math.Vector2D;
 import states.GameState;
@@ -10,10 +9,12 @@ import states.GameState;
 public abstract class PowerUp extends MovingObject {
     
     public static final double SPEED = 1.0;
-    private static final Random random = new Random();
+    
     
     public PowerUp(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
         super(position, velocity, maxVel, texture, gameState, scale);
+		anchotx = texture.getWidth();
+		alturatx = texture.getHeight();
     }
 
     @Override

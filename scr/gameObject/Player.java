@@ -1,6 +1,5 @@
 package gameObject;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -26,6 +25,9 @@ public class Player extends MovingObject {
 	
 	private Sounds shoot;
 	private Sounds explosionNave;
+	private int extraLaserCount = 0;
+	private final int MAX_EXTRA_LASERS = 2;
+
 
 	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState,double scale) {
 		super(position, velocity, maxVel, texture, gameState,scale);
@@ -53,7 +55,7 @@ public class Player extends MovingObject {
 	    if (distance < combinedRadius) {
 	        if (other instanceof PowerUp) {
 	            ((PowerUp) other).applyEffect(this);
-	            return false; // No destruir la nave cuando colisiona con un PowerUp
+	            return false; 
 	        }
 	        return true;
 	    }
@@ -75,22 +77,21 @@ public class Player extends MovingObject {
 				visible = !visible;
 			}
 		}
+
+		if (KeyBoard.SHOOT && !fireRate.isRunning() && !spawning) {
+            if (extraLaserCount == 0) {
+                shootSingleLaser();
+            } else if (extraLaserCount == 1) {
+                shootDoubleLaser();
+            } else if (extraLaserCount == 2) {
+                shootTripleLaser();
+            }
+            fireRate.run(Constants.FIRERATE);
+            shoot.changeVolumen(Constants.VOULMEN_LASER);
+            shoot.play();
+        }
 		
 		
-		if(KeyBoard.SHOOT && !fireRate.isRunning() && !spawning) {
-			gameState.getMovingObjects().add(0, new Laser(
-					getCenter().add(heading.scale(anchotx)),
-					heading,
-					10,
-					angle,
-					Assets.redLaser,
-					gameState,
-					Constants.LASER_SCALE
-					));
-			fireRate.run(Constants.FIRERATE);
-			shoot.changeVolumen(Constants.VOULMEN_LASER);
-			shoot.play();
-		}
 		if (shoot.getFramePosition() > 10000) {
 			shoot.stop();
 		}
@@ -159,6 +160,7 @@ public class Player extends MovingObject {
 		angle=0;
 		velocity=new Vector2D();
 		position =new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY);
+		extraLaserCount=0;
 	}
 	
 	@Override
@@ -198,5 +200,59 @@ public class Player extends MovingObject {
 	public void addLife() {
 	    gameState.addLife();
 	}
+	
+	private void shootSingleLaser() {
+        gameState.getMovingObjects().add(0, new Laser(
+            getCenter().add(heading.scale(anchotx)),
+            heading,
+            10,
+            angle,
+            Assets.redLaser,
+            gameState,
+            Constants.LASER_SCALE
+        ));
+    }
+
+    private void shootDoubleLaser() {
+        double offsetDistance = 40 * Constants.PlAYER_SCALE;
+        Vector2D offset1 = new Vector2D(offsetDistance, -30).rotate(angle);
+        Vector2D offset2 = new Vector2D(-offsetDistance, -30).rotate(angle);
+        gameState.getMovingObjects().add(0, new Laser(
+            getCenter().add(offset1),
+            heading,
+            10,
+            angle,
+            Assets.redLaser,
+            gameState,
+            Constants.LASER_SCALE
+        ));
+        gameState.getMovingObjects().add(0, new Laser(
+            getCenter().add(offset2),
+            heading,
+            10,
+            angle,
+            Assets.redLaser,
+            gameState,
+            Constants.LASER_SCALE
+        ));
+    }
+
+    private void shootTripleLaser() {
+        shootSingleLaser();
+        shootDoubleLaser();
+    }
+	
+	public void incrementExtraLaser() {
+	    if (extraLaserCount < MAX_EXTRA_LASERS) {
+	    	if(extraLaserCount >=2) {
+	    		extraLaserCount=2;
+	    	}else {
+	    		extraLaserCount++;
+	    	}
+	    	
+	        
+	    }
+	}
+
 
 }

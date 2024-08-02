@@ -1,6 +1,5 @@
 package gameObject;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import math.Vector2D;
@@ -21,6 +20,12 @@ public class ExtraLifePowerUp extends PowerUp {
     @Override
     public void applyEffect(Player player) {
         player.addLife();
+    }
+    
+    @Override
+    public double getCollisionRadius() {
+	    return collisionRadius * 3.0;
+
     }
 
 

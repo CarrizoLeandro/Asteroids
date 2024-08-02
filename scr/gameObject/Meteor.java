@@ -64,6 +64,24 @@ public class Meteor extends MovingObject{
 		gameState.divideMeteor(this);
 		gameState.addScore(Constants.METEOR_SCORE,position);
 		super.Destroy();
+		
+		if(this.size==Size.MED) {
+			double probabilidad=Math.random();
+			Vector2D position=this.getPosition();
+			Vector2D velocity=this.velocity;
+			double maxVel = this.maxVel;
+			BufferedImage texture= Assets.extraLife;
+			GameState gameState=this.gameState;
+			double scale=1.2;
+			
+			if(probabilidad <= 0.2) {
+				gameState.generatePowerUp(position, velocity, maxVel, texture, gameState, scale);
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	
@@ -83,5 +101,7 @@ public class Meteor extends MovingObject{
 	public Size getSize() {
 		return size;
 	}
+	
+	
 
 }

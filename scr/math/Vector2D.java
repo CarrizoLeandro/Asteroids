@@ -11,6 +11,15 @@ public class Vector2D {
 		x=0;
 		y=0;
 	}
+	public Vector2D rotate(double angle) {
+	    double cos = Math.cos(angle);
+	    double sin = Math.sin(angle);
+	    return new Vector2D(
+	        x * cos - y * sin,
+	        x * sin + y * cos
+	    );
+	}
+
 	
 	public Vector2D add(Vector2D v) {
 		return new Vector2D (x+v.getX(),y+v.getY());

@@ -45,6 +45,9 @@ public class Laser extends MovingObject {
 		
 	}
 	
+	public void extraLaser(Graphics g) {
+		
+	}
 
 	public Vector2D getCenter() {
 		return new Vector2D(position.getX()+anchotx/2,position.getY()+anchotx/2);

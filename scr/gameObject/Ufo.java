@@ -126,6 +126,18 @@ public class Ufo extends MovingObject{
 		explosionNave.playFromPosition(15000);
 		gameState.addScore(Constants.UFO_SCORE,position);
 		super.Destroy();
+		
+		double probabilidad=Math.random();
+		Vector2D position=new Vector2D(this.getPosition().getX() + this.anchotx / 2,this.getPosition().getY() + this.alturatx / 2);
+		Vector2D velocity=new Vector2D(0,0);
+		double maxVel = 0;
+		BufferedImage texture= Assets.extraLaser;
+		GameState gameState=this.gameState;
+		double scale=1.2;
+		
+		if(probabilidad <= 1) {
+			gameState.generateExtraLaser(position, velocity, maxVel, texture, gameState, scale);
+		}
 	}
 	
 	

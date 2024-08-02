@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import gameObject.Constants;
+import gameObject.ExtraLaser;
 import gameObject.ExtraLifePowerUp;
 import gameObject.Messege;
 import gameObject.Meteor;
@@ -50,22 +51,31 @@ public class GameState extends State {
 		
 		startWave();
 		
-		generatePowerUp();
 	
 	}
 	
 	
-	private void generatePowerUp() {
-	    Vector2D position = generateRandomPosition();
-	    Vector2D velocity = new Vector2D(Math.random() * 2 - 1, Math.random() * 2 - 1).normalize().scale(0.5);
-	    
+	public void generatePowerUp(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
+    
 	    movingObjects.add(new ExtraLifePowerUp(
 	            position,
 	            velocity,
-	            1,
-	            Assets.extraLife,
-	            this,
-	            1.0
+	            maxVel,
+	            texture,
+	            gameState,
+	            scale
+	    ));
+	}
+	
+	public void generateExtraLaser(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
+	    
+	    movingObjects.add(new ExtraLaser(
+	            position,
+	            velocity,
+	            maxVel,
+	            texture,
+	            gameState,
+	            scale
 	    ));
 	}
 
