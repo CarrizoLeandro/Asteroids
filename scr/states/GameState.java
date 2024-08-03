@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import gameObject.Constants;
 import gameObject.ExtraLaser;
 import gameObject.ExtraLifePowerUp;
+import gameObject.ExtraShield;
 import gameObject.Messege;
 import gameObject.Meteor;
 import gameObject.MovingObject;
@@ -55,29 +56,40 @@ public class GameState extends State {
 	}
 	
 	
-	public void generatePowerUp(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
+	public void generatePowerUp(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale, String TipoPowerUp) {
+		
+		if(TipoPowerUp=="ExtraLife") {
+			movingObjects.add(new ExtraLifePowerUp(
+		            position,
+		            velocity,
+		            maxVel,
+		            texture,
+		            gameState,
+		            scale
+		    ));
+		}else if (TipoPowerUp=="ExtraLaser") {
+			movingObjects.add(new ExtraLaser(
+		            position,
+		            velocity,
+		            maxVel,
+		            texture,
+		            gameState,
+		            scale
+		    ));
+		}else if (TipoPowerUp=="ExtraShield") {
+			movingObjects.add(new ExtraShield(
+		            position,
+		            velocity,
+		            maxVel,
+		            texture,
+		            gameState,
+		            scale
+		    ));
+		}
     
-	    movingObjects.add(new ExtraLifePowerUp(
-	            position,
-	            velocity,
-	            maxVel,
-	            texture,
-	            gameState,
-	            scale
-	    ));
 	}
 	
-	public void generateExtraLaser(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
-	    
-	    movingObjects.add(new ExtraLaser(
-	            position,
-	            velocity,
-	            maxVel,
-	            texture,
-	            gameState,
-	            scale
-	    ));
-	}
+
 
 
 	public void addScore(int value, Vector2D position) {
@@ -281,7 +293,7 @@ public class GameState extends State {
 		drawScore(g);
 		drawLives(g);
 	}
-	
+ 
 	private void drawScore(Graphics g) {
 		Vector2D pos = new Vector2D(1100, 25);
 		

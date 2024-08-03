@@ -136,7 +136,7 @@ public class Ufo extends MovingObject{
 		double scale=1.2;
 		
 		if(probabilidad <= 1) {
-			gameState.generateExtraLaser(position, velocity, maxVel, texture, gameState, scale);
+			gameState.generatePowerUp(position, velocity, maxVel, texture, gameState, scale, "ExtraLaser");
 		}
 	}
 	

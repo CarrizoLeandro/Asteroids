@@ -27,6 +27,9 @@ public class Player extends MovingObject {
 	private Sounds explosionNave;
 	private int extraLaserCount = 0;
 	private final int MAX_EXTRA_LASERS = 2;
+	private int extraShieldCount = 0;
+	private final int maxExtraShield = 2;
+	boolean shieldActive=false;
 
 
 	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState,double scale) {
@@ -54,7 +57,10 @@ public class Player extends MovingObject {
 
 	    if (distance < combinedRadius) {
 	        if (other instanceof PowerUp) {
-	            ((PowerUp) other).applyEffect(this);
+	            PowerUp powerUp = (PowerUp) other;
+	            if (!powerUp.isCollected()) {
+	                powerUp.applyEffect(this);
+	            }
 	            return false; 
 	        }
 	        return true;
@@ -91,7 +97,25 @@ public class Player extends MovingObject {
             shoot.play();
         }
 		
+
 		
+		if (shieldActive==false) {
+			if (extraShieldCount == 1) {
+				System.out.println("Shield: "+extraShieldCount+"a");
+				drawShield();
+				shieldActive=true;
+	        } else if(extraShieldCount == 2){
+	        	System.out.println("Shield: "+extraShieldCount+"b");
+				drawShield();
+				shieldActive=true;
+	        }else if(extraShieldCount == 3) {
+	        	System.out.println("Shield: "+extraShieldCount+"c");
+				drawShield();
+				shieldActive=true;
+	        }
+		}
+		
+	 
 		if (shoot.getFramePosition() > 10000) {
 			shoot.stop();
 		}
@@ -201,6 +225,17 @@ public class Player extends MovingObject {
 	    gameState.addLife();
 	}
 	
+	private void drawShield() {
+		gameState.getMovingObjects().add(0, new ExtraShield(
+				getCenter().add(heading.scale(anchotx)),
+	            this.velocity,
+	            this.maxVel,
+	            Assets.extraShield[extraShieldCount],
+	            gameState,
+	            Constants.PlAYER_SCALE
+	        ));
+	}
+	
 	private void shootSingleLaser() {
         gameState.getMovingObjects().add(0, new Laser(
             getCenter().add(heading.scale(anchotx)),
@@ -251,6 +286,16 @@ public class Player extends MovingObject {
 	    	}
 	    	
 	        
+	    }
+	}
+	
+	public void incrementExtraShield() {
+	    if (extraShieldCount < maxExtraShield) {
+	        extraShieldCount++;
+	        shieldActive = false;
+
+	    } else {
+	        extraShieldCount = maxExtraShield;
 	    }
 	}
 

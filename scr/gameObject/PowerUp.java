@@ -9,12 +9,18 @@ import states.GameState;
 public abstract class PowerUp extends MovingObject {
     
     public static final double SPEED = 1.0;
+    protected boolean isCollected;
     
     
     public PowerUp(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState, double scale) {
         super(position, velocity, maxVel, texture, gameState, scale);
 		anchotx = texture.getWidth();
 		alturatx = texture.getHeight();
+		this.isCollected=false;
+    }
+    
+    public boolean isCollected() {
+    	return isCollected;
     }
 
     @Override

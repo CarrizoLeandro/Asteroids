@@ -15,8 +15,9 @@ public class Assets {
 	public static ArrayList<BufferedImage> naveColorIndex = new ArrayList<>();
 	
 	//powerUps
-	public static BufferedImage extraLife;
-	public static BufferedImage extraLaser;
+	public static BufferedImage extraLaser, extraLife;
+	public static BufferedImage[] extraShield=new BufferedImage[3];
+	public static BufferedImage[] extraPowerUpShield=new BufferedImage[3];
 	
 	
 	//naves
@@ -63,6 +64,7 @@ public class Assets {
 		
 		extraLife =Loader.ImageLoader("/powerUp/pill_green.png");
 		extraLaser =Loader.ImageLoader("/powerUp/bolt_bronze.png");
+		
 		for (int i = 1 ; i<= 12 ; i++) {
 			naveColorIndex.add(Loader.ImageLoader("/ships/playerShip" + i + ".png"));
 		}
@@ -84,6 +86,13 @@ public class Assets {
 		}
 		for(int i = 0; i < numbers.length; i++)
 			numbers[i] = Loader.ImageLoader("/interface/numeral"+i+".png");
+		
+		for (int i = 0;i<extraShield.length;i++) {
+			extraShield[i] = Loader.ImageLoader("/powerUp/shield"+(i+1)+".png");
+		}
+		for (int i = 0;i<extraShield.length;i++) {
+			extraPowerUpShield[i] = Loader.ImageLoader("/powerUp/powerUpShield"+(i+1)+".png");
+		}
 		
 		backgroundMusic = Loader.loadSound("/sounds/2018-09-07-52675.wav");
 		playerShoot = Loader.loadSound("/sounds/laser-gun-shot-sound-future-sci-fi-lazer-wobble-chakongaudio-174883.wav");
