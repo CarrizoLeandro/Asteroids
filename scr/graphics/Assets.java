@@ -15,8 +15,7 @@ public class Assets {
 	public static ArrayList<BufferedImage> naveColorIndex = new ArrayList<>();
 	
 	//powerUps
-	public static BufferedImage extraLaser, extraLife;
-	public static BufferedImage[] extraShield=new BufferedImage[3];
+	public static BufferedImage extraLaser, extraLife,shield1,shield2,shield3;
 	public static BufferedImage[] extraPowerUpShield=new BufferedImage[3];
 	
 	
@@ -64,6 +63,9 @@ public class Assets {
 		
 		extraLife =Loader.ImageLoader("/powerUp/pill_green.png");
 		extraLaser =Loader.ImageLoader("/powerUp/bolt_bronze.png");
+		shield1 =Loader.ImageLoader("/powerUp/shield1.png");
+		shield2 =Loader.ImageLoader("/powerUp/shield2.png");
+		shield3 =Loader.ImageLoader("/powerUp/shield3.png");
 		
 		for (int i = 1 ; i<= 12 ; i++) {
 			naveColorIndex.add(Loader.ImageLoader("/ships/playerShip" + i + ".png"));
@@ -84,15 +86,17 @@ public class Assets {
 		for (int i = 0 ; i < exp.length ; i++ ) {
 			exp[i] = Loader.ImageLoader("/explosion/"+i+".png");
 		}
-		for(int i = 0; i < numbers.length; i++)
+		for(int i = 0; i < numbers.length; i++) {
 			numbers[i] = Loader.ImageLoader("/interface/numeral"+i+".png");
-		
-		for (int i = 0;i<extraShield.length;i++) {
-			extraShield[i] = Loader.ImageLoader("/powerUp/shield"+(i+1)+".png");
 		}
-		for (int i = 0;i<extraShield.length;i++) {
+		
+		for(int i = 0; i < extraPowerUpShield.length; i++) {
 			extraPowerUpShield[i] = Loader.ImageLoader("/powerUp/powerUpShield"+(i+1)+".png");
 		}
+		
+		
+		
+
 		
 		backgroundMusic = Loader.loadSound("/sounds/2018-09-07-52675.wav");
 		playerShoot = Loader.loadSound("/sounds/laser-gun-shot-sound-future-sci-fi-lazer-wobble-chakongaudio-174883.wav");
@@ -101,7 +105,7 @@ public class Assets {
 		explosionMeteor=Loader.loadSound("/sounds/small-rock-break-194553.wav");
 		menuMusic= Loader.loadSound("/sounds/gamemusic-6082.wav");
 		
-		if (player == null || speed == null) {
+		if (player == null || speed == null ||extraPowerUpShield== null ) {
             System.out.println("Error al cargar la imagen del jugador");
         } else {
             System.out.println("Imagen del jugador cargada exitosamente");

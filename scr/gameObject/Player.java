@@ -227,12 +227,12 @@ public class Player extends MovingObject {
 	
 	private void drawShield() {
 		gameState.getMovingObjects().add(0, new ExtraShield(
-				getCenter().add(heading.scale(anchotx)),
-	            this.velocity,
-	            this.maxVel,
-	            Assets.extraShield[extraShieldCount],
+				new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),
+				new Vector2D(0, 0),
+	            0,
+	            Assets.shield3,
 	            gameState,
-	            Constants.PlAYER_SCALE
+	            1.0
 	        ));
 	}
 	

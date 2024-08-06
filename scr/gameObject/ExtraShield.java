@@ -1,5 +1,8 @@
 package gameObject;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import math.Vector2D;
@@ -31,5 +34,13 @@ public class ExtraShield extends PowerUp{
 	    return collisionRadius * 3.0;
 
     }
+	@Override
+	public void draw(Graphics g) {
+	    Graphics2D g2d = (Graphics2D) g;
+	    AffineTransform at = AffineTransform.getTranslateInstance(position.getX(), position.getY());
+	    at.scale(scale, scale);
+	    g2d.drawImage(texture, at, null);
+	}
+
 
 }
