@@ -55,65 +55,72 @@ public abstract class MovingObject extends GameObject{
 		
 		}
 	}
-	
+
 	private void objectCollision(MovingObject a, MovingObject b) {
 		
-		 if ((a instanceof Player && ((Player) a).isSpawning()) || (b instanceof Player && ((Player) b).isSpawning())) {
-		        return;
-		    }
-		 	
-		 if ((a instanceof Player && b instanceof ExtraShield) || (a instanceof ExtraShield && b instanceof Player)) {
-		    	System.out.println("Collision detected between Player and ExtraShield, no action taken.");
-		        return;
-		    }
-		    // Manejo de colisiones de PowerUp con el jugador
-		    if (a instanceof PowerUp || b instanceof PowerUp) {
-		        if (a instanceof PowerUp) {
-		            PowerUp powerUp = (PowerUp) a;
-		            if (b instanceof Player) {
-		                Player player = (Player) b;
-		                powerUp.applyEffect(player);
-		                powerUp.Destroy();
-		            }
-		        } else if (b instanceof PowerUp) {
-		            PowerUp powerUp = (PowerUp) b;
-		            if (a instanceof Player) {
-		                Player player = (Player) a;
-		                powerUp.applyEffect(player);
-		                powerUp.Destroy();
-		            }
-		        }
-		        return; 
-		    }
+	    if (a instanceof Player && ((Player) a).isSpawning() || b instanceof Player && ((Player) b).isSpawning()) {
+	        return;
+	    }
 
-		    // Manejo de colisiones de Laser con PowerUp
-		    if (a instanceof Laser || b instanceof Laser) {
-		        if (a instanceof Laser) {
-		            Laser laser = (Laser) a;
-		            if (b instanceof PowerUp) {
-		                return; // El Laser no debe destruir el PowerUp
-		            }
-		        } else if (b instanceof Laser) {
-		            Laser laser = (Laser) b;
-		            if (a instanceof PowerUp) {
-		                return; // El Laser no debe destruir el PowerUp
-		            }
-		        }
-		    }
+	    if (a instanceof PowerUp || b instanceof PowerUp) {
+	        if (a instanceof PowerUp) {
+	            PowerUp powerUp = (PowerUp) a;
+	            if (b instanceof Player) {
+	                Player player = (Player) b;
+	                powerUp.applyEffect(player);
+	                powerUp.Destroy();
+	            }
+	        } else if (b instanceof PowerUp) {
+	            PowerUp powerUp = (PowerUp) b;
+	            if (a instanceof Player) {
+	                Player player = (Player) a;
+	                powerUp.applyEffect(player);
+	                powerUp.Destroy();
+	            }
+	        }
+	        return; 
+	    }
 
-		    // Manejo de colisiones de Player con ExtraShield
-		    if ((a instanceof Player && b instanceof ExtraShield) || (a instanceof ExtraShield && b instanceof Player)) {
-		    	System.out.println("Collision detected between Player and ExtraShield, no action taken.");
-		        return;
-		    }
+	    if (a instanceof Laser || b instanceof Laser) {
+	        if (a instanceof Laser) {
+	            Laser laser = (Laser) a;
+	            if (b instanceof PowerUp) {
+	                return;
+	            }
+	        } else if (b instanceof Laser) {
+	            Laser laser = (Laser) b;
+	            if (a instanceof PowerUp) {
+	                return;
+	            }
+	        }
+	    }
+	    
+	    if ((a instanceof Shield && b instanceof Laser) || (a instanceof Laser && b instanceof Shield)) {
+	        a.Destroy();
+	        b.Destroy();
+	        return;
+	    }
 
-		    // Manejo de otras colisiones
-		    if (!(a instanceof Meteor && b instanceof Meteor)) {
-		        gameState.playExplosion(getCenter());
-		        a.Destroy();
-		        b.Destroy();
-		    }
-		
+	    if ((a instanceof Shield && b instanceof Meteor) || (a instanceof Meteor && b instanceof Shield)) {
+	        a.Destroy();
+	        b.Destroy();
+	        return;
+	    }
+	    
+	    if ((a instanceof Player && b instanceof Shield) || (a instanceof Shield && b instanceof Player)) {
+	        return;
+	    }
+	    
+	    if((a instanceof LaserPlayer && b instanceof Shield) || (a instanceof Shield && b instanceof LaserPlayer)) {
+	    	return;
+	    }
+
+
+	    if (!(a instanceof Meteor && b instanceof Meteor)) {
+	        gameState.playExplosion(getCenter());
+	        a.Destroy();
+	        b.Destroy();
+	    }
 	}
 
 	
@@ -122,7 +129,7 @@ public abstract class MovingObject extends GameObject{
 	}
 	
 	public Vector2D getCenter() {
-		return new Vector2D(position.getX()+anchotx*scale/2,position.getY()+alturatx*scale/2);
+		return new Vector2D(position.getX()+(anchotx*scale/2),position.getY()+(alturatx*scale/2));
 	}
 
 }

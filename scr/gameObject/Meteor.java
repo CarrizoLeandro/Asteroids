@@ -1,5 +1,6 @@
 package gameObject;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -26,14 +27,15 @@ public class Meteor extends MovingObject{
     public double getCollisionRadius() {
         switch (size) {
             case BIG:
-                return collisionRadius;
+                return collisionRadius*scale;
             case MED:
-                return collisionRadius;
+                return collisionRadius*2.2;
             case SMALL:
-                return collisionRadius;
+                return collisionRadius*2.5;
             default:
-                return collisionRadius;
+                return collisionRadius*3.0;
         }
+        
     }
 		
 	@Override
@@ -54,6 +56,7 @@ public class Meteor extends MovingObject{
 		}
 		
 		angle+=Constants.DELTAANGLE/2;
+		
 	}
 
 	@Override
@@ -107,6 +110,13 @@ public class Meteor extends MovingObject{
 		at.rotate(angle,anchotx/2,alturatx/2);
 		
 		g2d.drawImage(texture,  at, null);
+		
+		//Testeo
+		g2d.setColor(Color.RED);
+	    int diameter = (int) (1.5*getCollisionRadius());
+	    int x = (int) (getCenter().getX() - getCollisionRadius()/1.5);
+	    int y = (int) (getCenter().getY() - getCollisionRadius()/1.5);
+	    g.drawOval(x, y, diameter, diameter);
 		
 	}
 	

@@ -1,5 +1,6 @@
 package gameObject;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -29,7 +30,11 @@ public class Player extends MovingObject {
 	private final int MAX_EXTRA_LASERS = 2;
 	private int extraShieldCount = 0;
 	private final int maxExtraShield = 2;
-	boolean shieldActive=false;
+	public static boolean shieldActive=false;
+	
+	private Shield shield;
+	
+	int G=0;
 
 
 	public Player(Vector2D position, Vector2D velocity, double maxVel , BufferedImage texture,GameState gameState,double scale) {
@@ -43,11 +48,19 @@ public class Player extends MovingObject {
 	    visible = true;
 	    shoot = new Sounds(Assets.playerShoot);
 	    explosionNave = new Sounds(Assets.explosionNave);
+	    shield = new Shield(position, new Vector2D(0, 0), maxVel, Assets.shield1, gameState, scale,this); // Inicializamos el escudo
+
 	}
 	
 	@Override
     public double getCollisionRadius() {
-	    return collisionRadius * Constants.PlAYER_SCALE;
+		if (shieldActive==true) {
+			collisionRadius= collisionRadius *0;
+			return collisionRadius;
+		}else {
+			return collisionRadius * Constants.PlAYER_SCALE;
+		}
+	    
 
     }
 	
@@ -104,17 +117,21 @@ public class Player extends MovingObject {
 				System.out.println("Shield: "+extraShieldCount+"a");
 				drawShield();
 				shieldActive=true;
-	        } else if(extraShieldCount == 2){
-	        	System.out.println("Shield: "+extraShieldCount+"b");
-				drawShield();
-				shieldActive=true;
-	        }else if(extraShieldCount == 3) {
-	        	System.out.println("Shield: "+extraShieldCount+"c");
-				drawShield();
-				shieldActive=true;
+				System.out.println("Shield: "+shieldActive+"a");
+	        }else {
+	        	
+	        	if(G==0) {
+	        		System.out.println("Shield: "+extraShieldCount+"b");
+		        	System.out.println("Shield: "+shieldActive+"b");
+		        	G=1;
+	        	}
+	        	
 	        }
 		}
 		
+		if (shieldActive) {
+	        shield.update();
+	    }
 	 
 		if (shoot.getFramePosition() > 10000) {
 			shoot.stop();
@@ -208,13 +225,20 @@ public class Player extends MovingObject {
 			g2d.drawImage(Assets.speed, at1,null);
 			g2d.drawImage(Assets.speed, at2,null);
 		}
-		
+	
 		
 		
 		at= AffineTransform.getTranslateInstance(position.getX(), position.getY());
 		at.scale(Constants.PlAYER_SCALE, Constants.PlAYER_SCALE);
 		at.rotate(angle,anchotx/2,alturatx/2);
 		g2d.drawImage(texture,  at, null);
+		
+		//Test
+		g2d.setColor(Color.RED);
+	    int diameter = (int) (2 * getCollisionRadius());
+	    int x = (int) (getCenter().getX() - getCollisionRadius());
+	    int y = (int) (getCenter().getY() - getCollisionRadius());
+	    g.drawOval(x, y, diameter, diameter);
 	}
 	
 	public boolean isSpawning() {
@@ -226,18 +250,20 @@ public class Player extends MovingObject {
 	}
 	
 	private void drawShield() {
-		gameState.getMovingObjects().add(0, new ExtraShield(
-				new Vector2D(Constants.INICIAL_PLAYER_POSX,Constants.INICIAL_PLAYER_POSY),
-				new Vector2D(0, 0),
-	            0,
-	            Assets.shield3,
-	            gameState,
-	            1.0
-	        ));
+		gameState.getMovingObjects().add(0, new Shield(
+		        new Vector2D(Constants.ANCHO / 2, Constants.ALTO / 2),
+		        new Vector2D(0, 0),
+		        0,
+		        Assets.shield1,
+		        gameState,
+		        0.7,
+		        this
+		    ));
+		shieldActive = true;
 	}
 	
 	private void shootSingleLaser() {
-        gameState.getMovingObjects().add(0, new Laser(
+        gameState.getMovingObjects().add(0, new LaserPlayer(
             getCenter().add(heading.scale(anchotx)),
             heading,
             10,
@@ -252,7 +278,7 @@ public class Player extends MovingObject {
         double offsetDistance = 40 * Constants.PlAYER_SCALE;
         Vector2D offset1 = new Vector2D(offsetDistance, -30).rotate(angle);
         Vector2D offset2 = new Vector2D(-offsetDistance, -30).rotate(angle);
-        gameState.getMovingObjects().add(0, new Laser(
+        gameState.getMovingObjects().add(0, new LaserPlayer(
             getCenter().add(offset1),
             heading,
             10,
@@ -261,7 +287,7 @@ public class Player extends MovingObject {
             gameState,
             Constants.LASER_SCALE
         ));
-        gameState.getMovingObjects().add(0, new Laser(
+        gameState.getMovingObjects().add(0, new LaserPlayer(
             getCenter().add(offset2),
             heading,
             10,
@@ -292,12 +318,23 @@ public class Player extends MovingObject {
 	public void incrementExtraShield() {
 	    if (extraShieldCount < maxExtraShield) {
 	        extraShieldCount++;
-	        shieldActive = false;
 
 	    } else {
 	        extraShieldCount = maxExtraShield;
 	    }
 	}
+	
+	public void decrementExtraShield() {
+	    if (extraShieldCount > 0) {
+	        extraShieldCount--;
 
+	    } else {
+	        extraShieldCount = 0;
+	    }
+	}
+	
+	public double getAngle() {
+	    return angle;
+	}
 
 }
